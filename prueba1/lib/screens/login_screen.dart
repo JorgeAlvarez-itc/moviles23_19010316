@@ -33,15 +33,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final googlebtn = SocialLoginButton(
     buttonType: SocialLoginButtonType.google, 
     onPressed: (){},
-    );
+  );
   final facebookbtn = SocialLoginButton(
     buttonType: SocialLoginButtonType.facebook, 
     onPressed: (){},
-    );
+  );
   final gitbtn = SocialLoginButton(
     buttonType: SocialLoginButtonType.github, 
     onPressed: (){},
-    );
+  );
   final imgLogo = Image.asset("assets/logo.png", height: 200,);
 
   @override
