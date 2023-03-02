@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:prueba1/models/post_model.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:prueba1/models/post_model.dart';
+import 'package:path_provider/path_provider.dart';
 class DatabaseHelper{
   
   static final nameDB= 'SOCIALDB';
@@ -57,6 +57,7 @@ class DatabaseHelper{
   Future <List<PostModel>> GETALLPOST() async{
     var conexion= await database;
     var result = await conexion.query('tblPost');
+    conexion.close();
     return result.map((post) => PostModel.fromMap(post)).toList();
   }
 }

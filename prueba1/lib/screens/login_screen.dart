@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final txtEmail = TextFormField(
     decoration: const InputDecoration(
-        labelText: "EMAIL USER", border: OutlineInputBorder()),
+        labelText: "Email", border: OutlineInputBorder()),
   );
 
   final txtPass = TextFormField(
@@ -43,39 +43,49 @@ class _LoginScreenState extends State<LoginScreen> {
   );
   final imgLogo = Image.asset(
     "assets/logo.png",
-    height: 120,
+    height: 100,
   );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    opacity: .3,
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/fondo.png'))),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Responsive(
-                mobile: _buildMobileContent(),
-                tablet: _buildTabletContent(),
-                desktop: _buildDesktopContent(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 1),
+        foregroundColor: Color.fromRGBO(255, 255, 255, 1),
+        child: Icon(Icons.settings),
+        onPressed: () {
+          Navigator.pushNamed(context, '/theme');
+        },
+      ),
+      body: Center(
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      opacity: .3,
+                      fit: BoxFit.cover,
+                      image: AssetImage('assets/fondo.png'))),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Responsive(
+                  mobile: _buildMobileContent(),
+                  tablet: _buildTabletContent(),
+                  desktop: _buildDesktopContent(),
+                ),
               ),
             ),
-          ),
-          isLoading ? const LoadingModalWidget() : Container()
-        ],
+            isLoading ? const LoadingModalWidget() : Container()
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildMobileContent() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         horizontalSpace,
         FractionallySizedBox(
@@ -103,8 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildTabletContent() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center, 
+      crossAxisAlignment: CrossAxisAlignment.center,  
       children: [
         Expanded(
           child: Column(
@@ -112,7 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               FractionallySizedBox(
-                widthFactor: 0.8, // ajusta el ancho de la imagen al 80% del ancho de la pantalla
+                widthFactor:
+                    0.8, // ajusta el ancho de la imagen al 80% del ancho de la pantalla
                 child: imgLogo,
               ),
               txtEmail,
@@ -145,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildDesktopContent() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(

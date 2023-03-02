@@ -19,4 +19,8 @@ class StylesSettings{
       )
     );
   }
+
+  static ThemeData personalTheme(BuildContext? context){
+    return ThemeData.fallback();
+  }
 }
