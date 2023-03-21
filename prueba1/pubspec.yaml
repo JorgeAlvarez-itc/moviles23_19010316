@@ -44,6 +44,7 @@ dependencies:
   concentric_transition: ^1.0.3
   lottie: ^2.2.0
   shared_preferences: ^2.0.18
+  table_calendar: ^3.0.9
 
 dev_dependencies:
   flutter_test:

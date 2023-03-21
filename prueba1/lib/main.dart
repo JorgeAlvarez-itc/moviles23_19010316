@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:prueba1/screens/about_screen.dart';
 import 'package:prueba1/screens/login_screen.dart';
+import 'package:prueba1/provider/flags_provider.dart';
 import 'package:prueba1/provider/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create:(_)=>ThemeProvider(id_tema,context)
         ),
+        ChangeNotifierProvider(create: (_)=>FlagsProvider()),
       ],
       child: PMSNApp(),
     );
