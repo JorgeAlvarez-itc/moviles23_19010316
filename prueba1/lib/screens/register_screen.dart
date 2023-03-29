@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:prueba1/firebase/email_auth.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -11,7 +12,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  EmailAuth? emailAuth=EmailAuth();
   final _formKey = GlobalKey<FormState>();
+  final txtEmailController = TextEditingController();
+  final txtPassController = TextEditingController();
   bool isLoading = false;
   File? _image;
   final horizontalSpace = SizedBox(
@@ -32,37 +36,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     },
   );
 
-  final txtEmail = TextFormField(
-    decoration: const InputDecoration(
-        label: Text("Email user"), border: OutlineInputBorder()),
-    keyboardType: TextInputType.emailAddress,
-    validator: (value) {
-      if (value!.isEmpty) {
-        return 'Por favor ingresa tu correo electrónico';
-      }
-      if (!value.contains('@')) {
-        return 'Por favor ingresa un correo electrónico válido';
-      }
-      return null;
-    },
-  );
-
-  final txtPass = TextFormField(
-    decoration: const InputDecoration(
-        label: Text("Password"), border: OutlineInputBorder()),
-    obscureText: true,
-    validator: (value) {
-      if (value!.isEmpty) {
-        return 'Por favor ingresa una contraseña';
-      }
-      if (value!.length < 6) {
-        return 'La contraseña debe tener al menos 6 caracteres';
-      }
-      return null;
-    },
-  );
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+
+      emailAuth!.registerWithEmailAndPassword(
+          email: txtEmailController.text, password: txtPassController.text);
       // Aquí iría el código para registrar al usuario en tu base de datos
       // También podrías guardar la imagen en tu servidor o almacenarla localmente en el dispositivo
       // Puedes acceder a la imagen usando la variable _image
@@ -135,6 +113,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final txtPass = TextFormField(
+      controller: txtPassController,
+      decoration: const InputDecoration(
+          label: Text("Password"), border: OutlineInputBorder()),
+      obscureText: true,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Por favor ingresa una contraseña';
+        }
+        if (value!.length < 6) {
+          return 'La contraseña debe tener al menos 6 caracteres';
+        }
+        return null;
+      },
+    );
+    final txtEmail = TextFormField(
+      controller: txtEmailController,
+      decoration: const InputDecoration(
+          label: Text("Email user"), border: OutlineInputBorder()),
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Por favor ingresa tu correo electrónico';
+        }
+        if (!value.contains('@')) {
+          return 'Por favor ingresa un correo electrónico válido';
+        }
+        return null;
+      },
+    );
+
     final buttonRegister = SocialLoginButton(
       buttonType: SocialLoginButtonType.generalLogin,
       text: 'Register',

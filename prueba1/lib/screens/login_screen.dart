@@ -1,7 +1,9 @@
 import '../responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:prueba1/firebase/email_auth.dart';
 import 'package:prueba1/widgets/loading_modal_widget.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -12,16 +14,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
-
-  final txtEmail = TextFormField(
-    decoration: const InputDecoration(
-        labelText: "Email", border: OutlineInputBorder()),
-  );
-
-  final txtPass = TextFormField(
-    decoration: const InputDecoration(
-        labelText: "Password", border: OutlineInputBorder()),
-  );
+  EmailAuth? emailAuth;
+  TextEditingController? txtemailCont = TextEditingController();
+  TextEditingController? txtPassController = TextEditingController();
 
   final horizontalSpace = SizedBox(
     height: 10,
@@ -48,6 +43,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+     final txtEmail = TextFormField(
+      controller: txtemailCont,
+      decoration: const InputDecoration(
+          labelText: "Email", border: OutlineInputBorder()),
+    );
+
+    final txtPass = TextFormField(
+      controller: txtPassController,
+      decoration: const InputDecoration(
+          labelText: "Password", border: OutlineInputBorder()),
+    );
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
@@ -70,9 +76,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Responsive(
-                  mobile: _buildMobileContent(),
-                  tablet: _buildTabletContent(),
-                  desktop: _buildDesktopContent(),
+                  mobile: _buildMobileContent(txtEmail,txtPass),
+                  tablet: _buildTabletContent(txtEmail,txtPass),
+                  desktop: _buildDesktopContent(txtEmail,txtPass),
                 ),
               ),
             ),
@@ -83,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildMobileContent() {
+  Widget _buildMobileContent(TextFormField txtEmail,TextFormField txtPass) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -111,10 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildTabletContent() {
+  Widget _buildTabletContent(TextFormField txtEmail,TextFormField txtPass) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center, 
-      crossAxisAlignment: CrossAxisAlignment.center,  
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: Column(
@@ -154,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildDesktopContent() {
+  Widget _buildDesktopContent(TextFormField txtEmail,TextFormField txtPass) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -200,10 +206,11 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: () {
         isLoading = true;
         setState(() {});
-        Future.delayed(const Duration(milliseconds: 4000)).then((value) {
-          isLoading = false;
-          Navigator.pushNamed(context, '/dash');
-          setState(() {});
+        emailAuth!.signInWithEmailAndPassword(email: txtemailCont!.text, password: txtPassController!.text).then((value){
+          if(value){
+             Navigator.pushNamed(context, '/dash');
+          }
+          isLoading=false;
         });
       },
     );
