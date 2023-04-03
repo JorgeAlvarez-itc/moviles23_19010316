@@ -3,6 +3,7 @@ import 'package:prueba1/screens/login_screen.dart';
 import 'package:prueba1/screens/eventos_screen.dart';
 import 'package:prueba1/screens/add_post_screen.dart';
 import 'package:prueba1/screens/register_screen.dart';
+import 'package:prueba1/screens/list_clash_cards.dart';
 import 'package:prueba1/screens/dashboard_screen.dart';
 import 'package:prueba1/screens/list_popular_videos.dart';
 import 'package:prueba1/screens/modify_event_screen.dart';
@@ -20,6 +21,6 @@ Map<String,WidgetBuilder>getApplicationRoutes(){
     '/modify':(BuildContext context) => ModifyEvent(),
     '/add':(BuildContext context)=>AddPostScreen(),
     '/popular':(BuildContext context)=>ListPopularVideos(),
-    //'/details':(BuildContext context)=>MovieDetailScreen(),
+    '/clash':(BuildContext context)=>ListClashCard(),
   };
 }

@@ -30,6 +30,8 @@ class EmailAuth {
     required  String password,
   }
   ) async {
+    print(email);
+    print(password);
     try {
       final UserCredential userCredential = await _auth
           .signInWithEmailAndPassword(email: email, password: password);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:prueba1/screens/list_post.dart';
 import 'package:prueba1/provider/theme_provider.dart';
 import 'package:prueba1/settings/styles_settings.dart';
@@ -14,6 +15,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   bool isDarkModeEnabled = false;
+  AudioPlayer audioPlayer = AudioPlayer();
   @override
   void initState() {
     super.initState();
@@ -72,6 +74,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: (){Navigator.pushNamed(context, '/popular');},
               title: Text('API videos'),
               leading: Icon(Icons.movie),
+              trailing: Icon(Icons.chevron_right),
+            ),
+            ListTile(
+              onTap: () async{
+                await audioPlayer.play('https://vgmsite.com/soundtracks/clash-royale-original-game-soundtrack/afzbmphjha/Scroll%20Loading%2001.mp3');
+                Future.delayed(Duration(seconds: 1)).then((_) => {
+                  Navigator.pushNamed(context, '/clash')
+                });
+              },
+              title: Text('Clash royale'),
+              leading: Icon(Icons.gamepad),
               trailing: Icon(Icons.chevron_right),
             ),
             DayNightSwitcher(

@@ -50,6 +50,8 @@ dependencies:
   firebase_core: ^2.8.0
   firebase_auth: ^4.3.0
   youtube_player_flutter: ^8.1.2
+  audioplayers: ^0.20.1
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

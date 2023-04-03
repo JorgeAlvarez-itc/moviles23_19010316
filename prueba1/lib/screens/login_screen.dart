@@ -14,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
-  EmailAuth? emailAuth;
+  EmailAuth emailAuth=EmailAuth();
   TextEditingController? txtemailCont = TextEditingController();
   TextEditingController? txtPassController = TextEditingController();
 
@@ -206,11 +206,16 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: () {
         isLoading = true;
         setState(() {});
+        print(txtemailCont!.text);
+        print(txtPassController!.text);
         emailAuth!.signInWithEmailAndPassword(email: txtemailCont!.text, password: txtPassController!.text).then((value){
           if(value){
              Navigator.pushNamed(context, '/dash');
+             isLoading=false;
+          }else{
+            isLoading=false;
+            SnackBar(content: Text('Verifica tus credenciales'),);
           }
-          isLoading=false;
         });
       },
     );
