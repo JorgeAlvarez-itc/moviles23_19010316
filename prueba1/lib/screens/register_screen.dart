@@ -1,8 +1,11 @@
 import 'dart:io';
+import '../firebase/google_auth.dart';
 import 'package:flutter/material.dart';
+import '../firebase/facebook_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prueba1/firebase/email_auth.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,7 +15,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  EmailAuth? emailAuth=EmailAuth();
+  EmailAuth emailAuth=EmailAuth();
+  GoogleAuth googleAuth= GoogleAuth();
+  FaceAuth faceAuth= FaceAuth();
   final _formKey = GlobalKey<FormState>();
   final txtEmailController = TextEditingController();
   final txtPassController = TextEditingController();
@@ -95,24 +100,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
   }
 
-  final googlebtn = SocialLoginButton(
-    buttonType: SocialLoginButtonType.google,
-    text: 'Continue with Google',
-    onPressed: () {},
-  );
-  final facebookbtn = SocialLoginButton(
-    buttonType: SocialLoginButtonType.facebook,
-    text: 'Continue with Facebook',
-    onPressed: () {},
-  );
-  final gitbtn = SocialLoginButton(
-    buttonType: SocialLoginButtonType.github,
-    text: 'Continue with Github',
-    onPressed: () {},
-  );
-
   @override
   Widget build(BuildContext context) {
+    final googlebtn = SocialLoginButton(
+      buttonType: SocialLoginButtonType.google,
+      text: 'Continue with Google',
+      onPressed: () {
+        googleAuth.registerWithGoogle().then((value) {
+          if(value){
+            print('Registro con exito');
+          }else{
+            print('ocurrio un error xd');
+          }
+        });
+      },
+    );
+    final facebookbtn = SocialLoginButton(
+      buttonType: SocialLoginButtonType.facebook,
+      text: 'Continue with Facebook',
+      onPressed: () {
+        faceAuth.signUpWithFacebook().then((value){
+          if(value){
+            print('Registro con exito');
+          }else{
+            print('ocurrio un error xd');
+          }
+        });
+      },
+    );
+  
     final txtPass = TextFormField(
       controller: txtPassController,
       decoration: const InputDecoration(
@@ -207,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         horizontalSpace,
                         facebookbtn,
                         horizontalSpace,
-                        gitbtn,
+                        Divider(),
                         horizontalSpace,
                         horizontalSpace,
                         txtLogin,

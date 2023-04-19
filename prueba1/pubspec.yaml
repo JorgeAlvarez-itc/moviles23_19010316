@@ -52,6 +52,10 @@ dependencies:
   youtube_player_flutter: ^8.1.2
   audioplayers: ^0.20.1
   cached_network_image: ^3.2.3
+  google_sign_in: ^6.1.0
+  flutter_facebook_auth: ^5.0.8
+  fluttertoast: ^8.2.1
+  awesome_dialog: ^3.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,14 @@
 import '../responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:prueba1/firebase/email_auth.dart';
+import 'package:prueba1/firebase/github_auth.dart';
+import 'package:prueba1/firebase/google_auth.dart';
+import 'package:prueba1/firebase/facebook_auth.dart';
 import 'package:prueba1/widgets/loading_modal_widget.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
+
+
+
 
 
 class LoginScreen extends StatefulWidget {
@@ -15,23 +21,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   EmailAuth emailAuth=EmailAuth();
+  GoogleAuth googleAuth= GoogleAuth();
+  FaceAuth faceAuth= FaceAuth();
+  //GitAuth githubAuth= GitAuth();
   TextEditingController? txtemailCont = TextEditingController();
   TextEditingController? txtPassController = TextEditingController();
-
+  
   final horizontalSpace = SizedBox(
     height: 10,
   );
   final verticalSpace = SizedBox(
     width: 10,
   );
-  final googlebtn = SocialLoginButton(
-    buttonType: SocialLoginButtonType.google,
-    onPressed: () {},
-  );
-  final facebookbtn = SocialLoginButton(
-    buttonType: SocialLoginButtonType.facebook,
-    onPressed: () {},
-  );
+  
   final gitbtn = SocialLoginButton(
     buttonType: SocialLoginButtonType.github,
     onPressed: () {},
@@ -43,7 +45,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-     final txtEmail = TextFormField(
+
+    final googlebtn = SocialLoginButton(
+    buttonType: SocialLoginButtonType.google,
+    onPressed: () async{
+      isLoading = true;
+      setState(() {});
+      await googleAuth.signInWithGoogle().then((value){
+        if(value.name!=null){
+         isLoading=false;
+         Navigator.pushNamed(context, '/dash',arguments:value); 
+        }else{
+          isLoading=false;
+          setState(() {});
+          SnackBar(content: Text('Verifica tus credenciales'),);
+        }
+      });
+     },
+    );
+
+    final txtEmail = TextFormField(
       controller: txtemailCont,
       decoration: const InputDecoration(
           labelText: "Email", border: OutlineInputBorder()),
@@ -76,9 +97,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Responsive(
-                  mobile: _buildMobileContent(txtEmail,txtPass),
-                  tablet: _buildTabletContent(txtEmail,txtPass),
-                  desktop: _buildDesktopContent(txtEmail,txtPass),
+                  mobile: _buildMobileContent(txtEmail,txtPass,googlebtn),
+                  tablet: _buildTabletContent(txtEmail,txtPass,googlebtn),
+                  desktop: _buildDesktopContent(txtEmail,txtPass,googlebtn),
                 ),
               ),
             ),
@@ -89,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildMobileContent(TextFormField txtEmail,TextFormField txtPass) {
+  Widget _buildMobileContent(TextFormField txtEmail,TextFormField txtPass, SocialLoginButton googlebtn) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -108,16 +129,16 @@ class _LoginScreenState extends State<LoginScreen> {
         horizontalSpace,
         googlebtn,
         horizontalSpace,
-        facebookbtn,
+        _buildFacebookButton(),
         horizontalSpace,
-        gitbtn,
+        _buildGitHubButton(),
         horizontalSpace,
         _buildRegisterTextButton(),
       ],
     );
   }
 
-  Widget _buildTabletContent(TextFormField txtEmail,TextFormField txtPass) {
+  Widget _buildTabletContent(TextFormField txtEmail,TextFormField txtPass, SocialLoginButton googlebtn) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,9 +171,9 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               googlebtn,
               horizontalSpace,
-              facebookbtn,
+              _buildFacebookButton(),
               horizontalSpace,
-              gitbtn,
+              _buildGitHubButton(),
             ],
           ),
         ),
@@ -160,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildDesktopContent(TextFormField txtEmail,TextFormField txtPass) {
+  Widget _buildDesktopContent(TextFormField txtEmail,TextFormField txtPass, SocialLoginButton googlebtn) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -190,14 +211,55 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               googlebtn,
               horizontalSpace,
-              facebookbtn,
+              _buildFacebookButton(),
               horizontalSpace,
-              gitbtn,
+              _buildGitHubButton(),
             ],
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildFacebookButton(){
+    return SocialLoginButton(
+      buttonType: SocialLoginButtonType.facebook,
+      onPressed: () async{
+        isLoading=true;
+        setState(() {});
+        faceAuth.signInWithFacebook().then((value) {
+         if(value.name!=null){
+             Navigator.pushNamed(context, '/dash',arguments:value);
+             isLoading=false;
+          }else{
+            isLoading=false;
+            SnackBar(content: Text('Verifica tus credenciales'),);
+          }
+          setState(() {});
+        });
+      },
+    );
+  }
+
+  Widget _buildGitHubButton(){
+    return SocialLoginButton(
+      buttonType: SocialLoginButtonType.github, 
+      onPressed: () async{
+          /*
+          isLoading=true;
+          githubAuth.signInWithGitHub(context).then((value){
+            if(value){
+              Navigator.pushNamed(context, '/dash');
+              isLoading=false;
+            }else{
+              isLoading=false;
+              SnackBar(content: Text('Verifica tus credenciales'),);
+            }
+            setState(() {});
+          });
+          */
+        }
+      );
   }
 
   Widget _buildLoginButton() {

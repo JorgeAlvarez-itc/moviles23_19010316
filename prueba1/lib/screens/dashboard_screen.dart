@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:prueba1/models/user_model.dart';
 import 'package:prueba1/screens/list_post.dart';
+import 'package:prueba1/firebase/google_auth.dart';
+import 'package:prueba1/firebase/facebook_auth.dart';
 import 'package:prueba1/provider/theme_provider.dart';
 import 'package:prueba1/settings/styles_settings.dart';
 import 'package:day_night_switcher/day_night_switcher.dart';
@@ -16,6 +19,10 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   bool isDarkModeEnabled = false;
   AudioPlayer audioPlayer = AudioPlayer();
+  GoogleAuth googleAuth= GoogleAuth();
+  FaceAuth faceAuth= FaceAuth();
+  UserModel? user;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +38,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if(ModalRoute.of(context)!.settings.arguments!=null){
+      user = ModalRoute.of(context)!.settings.arguments as UserModel;
+    }
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -49,13 +59,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       drawer: Drawer(
         child: ListView(
           children: [
-            const UserAccountsDrawerHeader(
+            UserAccountsDrawerHeader(
                 currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      'https://images.deepai.org/machine-learning-models/d4b1dd3ee43648a997650dc7f9e6923f/panda.jpeg'),
+                  backgroundImage: NetworkImage(user!.photoUrl.toString()),
                 ),
-                accountName: Text('Practica 1 topicos moviles'),
-                accountEmail: Text('practica1@itcelaya.edu.mx')),
+                accountName: Text(user!.name.toString()),
+                accountEmail: Text(user!.email.toString())),
             ListTile(
               onTap: () {},
               title: Text('Practica 1'),
@@ -97,7 +106,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 setState(() {});
               },
             ),
-            
+            ListTile(
+              onTap: (){
+                try{
+                  googleAuth.signOutWithGoogle().then((value){
+                    if(value){
+                      Navigator.pushNamed(context, '/login');
+                    }else{
+                      print('no');
+                    }
+                  });
+                  faceAuth.signOut().then((value){
+                    if(value){
+                      Navigator.pushNamed(context, '/login');
+                    }else{
+                      print('no');
+                    }
+                  });
+                }catch(e){
+                  print(e);
+                }
+              },
+              title: const Text('Logout'),
+              leading: const Icon(Icons.logout),
+            ),
           ],
         ),
       ),
