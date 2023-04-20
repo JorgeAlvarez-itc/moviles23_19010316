@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import '../firebase/facebook_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prueba1/firebase/email_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:prueba1/widgets/awesomeDialog_widget.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
-
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,9 +16,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  EmailAuth emailAuth=EmailAuth();
-  GoogleAuth googleAuth= GoogleAuth();
-  FaceAuth faceAuth= FaceAuth();
+  EmailAuth emailAuth = EmailAuth();
+  GoogleAuth googleAuth = GoogleAuth();
+  FaceAuth faceAuth = FaceAuth();
+  Awesome awesome = Awesome();
   final _formKey = GlobalKey<FormState>();
   final txtEmailController = TextEditingController();
   final txtPassController = TextEditingController();
@@ -43,7 +45,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-
       emailAuth!.registerWithEmailAndPassword(
           email: txtEmailController.text, password: txtPassController.text);
       // Aquí iría el código para registrar al usuario en tu base de datos
@@ -107,10 +108,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
       text: 'Continue with Google',
       onPressed: () {
         googleAuth.registerWithGoogle().then((value) {
-          if(value){
-            print('Registro con exito');
-          }else{
-            print('ocurrio un error xd');
+          if (value == 1) {
+            awesome
+                .buildDialog(
+                    context,
+                    DialogType.success,
+                    'Registro exitoso',
+                    'Su cuenta se ha registrado por favor inicia sesion',
+                    '/login',
+                    AnimType.scale,
+                    false)
+                .show();
+          } else if (value == 2) {
+            awesome
+                .buildDialog(
+                    context,
+                    DialogType.warning,
+                    'La cuenta ya está registrada',
+                    'Ya existe una cuenta registrada con este correo electronico, por favor inicie sesion',
+                    '/login',
+                    AnimType.bottomSlide,
+                    false)
+                .show();
+          } else {
+            awesome
+                .buildDialog(
+                    context,
+                    DialogType.error,
+                    'Ocurrio un error',
+                    'Ocurrió un error al intentar realizar el registro',
+                    '/register',
+                    AnimType.bottomSlide,
+                    false)
+                .show();
           }
         });
       },
@@ -119,16 +149,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
       buttonType: SocialLoginButtonType.facebook,
       text: 'Continue with Facebook',
       onPressed: () {
-        faceAuth.signUpWithFacebook().then((value){
-          if(value){
-            print('Registro con exito');
-          }else{
-            print('ocurrio un error xd');
+        faceAuth.signUpWithFacebook().then((value) {
+          if (value == 1) {
+            awesome
+                .buildDialog(
+                    context,
+                    DialogType.success,
+                    'Registro exitoso',
+                    'Su cuenta se ha registrado por favor inicia sesion',
+                    '/login',
+                    AnimType.scale,
+                    false)
+                .show();
+          } else if (value == 2) {
+            awesome
+                .buildDialog(
+                    context,
+                    DialogType.warning,
+                    'La cuenta ya está registrada',
+                    'Ya existe una cuenta registrada con este correo electronico, por favor inicie sesion',
+                    '/login',
+                    AnimType.bottomSlide,
+                    false)
+                .show();
+          } else {
+            awesome
+                .buildDialog(
+                    context,
+                    DialogType.error,
+                    'Ocurrio un error',
+                    'Ocurrió un error al intentar realizar el registro',
+                    '/register',
+                    AnimType.bottomSlide,
+                    false)
+                .show();
           }
         });
       },
     );
-  
+
     final txtPass = TextFormField(
       controller: txtPassController,
       decoration: const InputDecoration(

@@ -24,7 +24,7 @@ class GoogleAuth {
     }
   }
 
-  Future<bool> registerWithGoogle() async {
+  Future<int> registerWithGoogle() async {
     this.signOutWithGoogle();
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -40,10 +40,13 @@ class GoogleAuth {
       await userCredential.user!.linkWithCredential(credential);
       userCredential.user!.sendEmailVerification();
       print('User registered: ${userCredential.user}');
-      return true;
+      return 1;
     } catch (e) {
-      print(e);
-      return false;
+      if(e.toString().contains('already')){
+        return 2;
+      }else{
+        return 3;
+      }
     }
   }
 

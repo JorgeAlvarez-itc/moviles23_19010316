@@ -4,9 +4,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:prueba1/models/user_model.dart';
 import 'package:prueba1/screens/list_post.dart';
 import 'package:prueba1/firebase/google_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:prueba1/firebase/facebook_auth.dart';
 import 'package:prueba1/provider/theme_provider.dart';
 import 'package:prueba1/settings/styles_settings.dart';
+import 'package:prueba1/widgets/awesomeDialog_widget.dart';
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   AudioPlayer audioPlayer = AudioPlayer();
   GoogleAuth googleAuth= GoogleAuth();
   FaceAuth faceAuth= FaceAuth();
+  Awesome awesome= Awesome(); 
   UserModel? user;
 
   @override
@@ -109,20 +112,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ListTile(
               onTap: (){
                 try{
-                  googleAuth.signOutWithGoogle().then((value){
-                    if(value){
-                      Navigator.pushNamed(context, '/login');
-                    }else{
-                      print('no');
-                    }
-                  });
-                  faceAuth.signOut().then((value){
-                    if(value){
-                      Navigator.pushNamed(context, '/login');
-                    }else{
-                      print('no');
-                    }
-                  });
+                  awesome.buildDialog(context,
+                   DialogType.infoReverse, 
+                   'Confirmar',
+                   '¿Realmente desea cerrar sesion?',
+                   '/login',
+                   AnimType.bottomSlide, 
+                   true).show().then((value) {
+                    print(value);
+                   });
+                  
                 }catch(e){
                   print(e);
                 }

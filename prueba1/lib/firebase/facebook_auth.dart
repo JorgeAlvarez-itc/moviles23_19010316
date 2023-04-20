@@ -28,7 +28,7 @@ class FaceAuth {
     }
   }
 
-  Future<bool> signUpWithFacebook() async {
+  Future<int> signUpWithFacebook() async {
     this.signOut();
     try {
       final LoginResult result = await facebookAuth.login();
@@ -48,13 +48,16 @@ class FaceAuth {
         );
         // Linking the Facebook credential to the Firebase user
         await userCredential.user!.linkWithCredential(credential);
-        return true;
+        return 1;
       } else {
-        return false;
+        return 3;
       }
     } catch (e) {
-      print('Error signing up with Facebook: $e');
-      return false;
+      if(e.toString().contains('already')){
+        return 2;
+      }else{
+        return 3;
+      }
     }
   }
 
