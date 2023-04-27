@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PopularModel {
   String? backdropPath;
   int? id;
@@ -38,6 +40,23 @@ class PopularModel {
       title: map['title'],
       voteAverage: (map['vote_average'] is int) ? (map['vote_average'] as int).toDouble():map['vote_average'],
       voteCount: map['vote_count'],
+    );
+  }
+
+  factory PopularModel.fromQuerySnapshot(QueryDocumentSnapshot document){
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+    return PopularModel(
+      backdropPath: data['backdrop_path'],
+      id: data['id'],
+      originalLanguage: data['original_language'],
+      originalTitle: data['original_title'],
+      overview: data['overview'],
+      popularity: data['popularity'],
+      posterPath: data['poster_path'],
+      releaseDate: data['release_date'],
+      title: data['title'],
+      voteAverage: data['vote_average'],
+      voteCount: data['vote_count'],
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:prueba1/models/pupular_model.dart';
 import 'package:prueba1/provider/flags_provider.dart';
 import 'package:prueba1/database/database_helper.dart';
+import 'package:prueba1/firebase/favorites_firebase.dart';
 
 class ItemPopular extends StatefulWidget {
   ItemPopular({super.key, required this.popularModel});
@@ -14,7 +15,8 @@ class ItemPopular extends StatefulWidget {
 
 class _ItemPopularState extends State<ItemPopular> {
   DatabaseHelper databaseHelper = DatabaseHelper();
-
+  FavoritesFirebase _firebase=FavoritesFirebase();
+  
   @override
   Widget build(BuildContext context) {
     FlagsProvider flag= Provider.of<FlagsProvider>(context);
@@ -39,7 +41,7 @@ class _ItemPopularState extends State<ItemPopular> {
           top: 0.0,
           right: 20,
           child: FutureBuilder(
-              future: databaseHelper.searchPopular(widget.popularModel.id!),
+              future: _firebase.searchPopular(widget.popularModel.id!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return IconButton(
@@ -48,8 +50,10 @@ class _ItemPopularState extends State<ItemPopular> {
                     onPressed: () {
                       if(snapshot.data!=true){
                         databaseHelper.INSERT('tblPopularFav', widget.popularModel!.toMap()).then((value) => flag.setflagListPost());
+                        _firebase.insFavorite(widget.popularModel.toMap()).then((value)=> flag.setflagListPost());
                       }else{
                         databaseHelper.DELETE('tblPopularFav', widget.popularModel.id!, 'id').then((value) => flag.setflagListPost());
+                        _firebase.delFavorite(widget.popularModel.id!).then((value)=> flag.setflagListPost());
                       }
                     },
                   );

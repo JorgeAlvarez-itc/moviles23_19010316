@@ -8,6 +8,7 @@ import 'package:prueba1/screens/dashboard_screen.dart';
 import 'package:prueba1/screens/list_popular_videos.dart';
 import 'package:prueba1/screens/modify_event_screen.dart';
 import 'package:prueba1/screens/theme_select_screen.dart';
+import 'package:prueba1/screens/list_favorites_cloud.dart';
 import 'package:prueba1/screens/movie_details_screen.dart';
 
 
@@ -21,6 +22,7 @@ Map<String,WidgetBuilder>getApplicationRoutes(){
     '/modify':(BuildContext context) => ModifyEvent(),
     '/add':(BuildContext context)=>AddPostScreen(),
     '/popular':(BuildContext context)=>ListPopularVideos(),
+    '/favs':(BuildContext context)=>ListFavoritesCloud(),
     '/clash':(BuildContext context)=>ListClashCard(),
   };
 }

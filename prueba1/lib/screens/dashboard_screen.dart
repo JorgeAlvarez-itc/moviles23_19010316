@@ -8,6 +8,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:prueba1/firebase/facebook_auth.dart';
 import 'package:prueba1/provider/theme_provider.dart';
 import 'package:prueba1/settings/styles_settings.dart';
+import 'package:prueba1/screens/list_favorites_cloud.dart';
 import 'package:prueba1/widgets/awesomeDialog_widget.dart';
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,7 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: AppBar(
         title: Text('Social ITC'),
       ),
-      body: ListPost(),
+      body: ListFavoritesCloud(),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('Add post'),
         icon: const Icon(Icons.add_comment),
@@ -89,6 +90,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               trailing: Icon(Icons.chevron_right),
             ),
             ListTile(
+              onTap: (){Navigator.pushNamed(context, '/favs');},
+              title: Text('Popular favs cloud'),
+              leading: Icon(Icons.cloud),
+              trailing: Icon(Icons.chevron_right),
+            ),
+            ListTile(
               onTap: () async{
                 await audioPlayer.play('https://vgmsite.com/soundtracks/clash-royale-original-game-soundtrack/afzbmphjha/Scroll%20Loading%2001.mp3');
                 Future.delayed(Duration(seconds: 1)).then((_) => {
@@ -115,7 +122,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   awesome.buildDialog(context,
                    DialogType.infoReverse, 
                    'Confirmar',
-                   '¿Realmente desea cerrar sesion?',
+                   '¿Realmente desea cerrar la sesión?',
                    '/login',
                    AnimType.bottomSlide, 
                    true).show().then((value) {
